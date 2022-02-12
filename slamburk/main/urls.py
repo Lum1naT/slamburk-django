@@ -28,8 +28,11 @@ urlpatterns = [
     ## / Section ##
     path('', views.index, name="index"),
     path('login', views.account_login, name="account_login"),
+    path('logout', views.account_logout, name="account_logout"),
     path('registrace', views.account_register, name="account_register"),
-    path('newknight', views.create_knight, name="create_knight"),
+    path('ucet', views.account_overview, name="account_overview"),
+    path('novy-rytir', views.create_knight, name="create_knight"),
+    path('rytiri', views.all_knights_overview, name="all_knights_overview"),
     path('process_account_login', views.process_account_login,
          name="process_account_login"),
     path('process_account_register', views.process_account_register,

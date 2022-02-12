@@ -35,7 +35,9 @@
             <a href="/registrace"><i class="bi-person icon mx-3" role="img" aria-label="User"></i></a>
 
             <a href="/login"><i class="bi-cart icon mx-2" role="img" aria-label="Cart"></i> </a>
-
+            {% if request.session.user_id %}
+            <a href="/logout"><i class="bi-cart icon mx-2" role="img" aria-label="Cart"></i> </a>
+            {% endif %}
 
           </div>
     </div>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 
 from .forms import RegisterForm, LoginForm, CreateKnightForm
 from .models import User
@@ -29,6 +29,31 @@ def _create_new_user(email, password, name=None):
 ## Views ##
 def index(request):
     return render(request, 'main/index.html')
+
+
+def account_logout(request):
+    if request.method == "GET":
+        if request.session["user_id"] is not None:
+            del request.session["user_id"]
+            return redirect("account_login")
+
+
+def account_overview(request):
+    if request.method == "GET":
+        if request.session["user_id"] is not None:
+            # TODO: ADD FORM!
+            return render(request, "main/account_personal.html")
+        else:
+            return redirect("account_login")
+
+
+def all_knights_overview(request):
+    if request.method == "GET":
+        if request.session["user_id"] is not None:
+            print("ok: " + str(request.session["user_id"]))
+            return render(request, "main/user_knights_overview.html")
+        else:
+            return redirect("account_login")
 
 
 def create_knight(request):
@@ -61,6 +86,22 @@ def process_account_login(request):
     if request.method == "POST":
         email = request.POST.get('email', '')
         password = request.POST.get('password', '')
+        user = _get_user_by_email(email)
+        if isinstance(user, bool):
+            # user not found, Error
+            return redirect("account_login")
+        else:
+            # user found, OK.
+            request.session["user_id"] = user.id
+            request.session["user_email"] = user.email
+
+            if check_password(password, user.password):
+                # password ok.
+                redirect("all_knights_overview")
+            else:
+                # password not ok
+                redirect()
+            return redirect("all_knights_overview")
         return redirect("account_login")
 
 
@@ -80,7 +121,7 @@ def process_account_register(request):
             new_user = _create_new_user(
                 email=email, name=name, password=hashed_password)
             print("OK.")
-            return redirect("account_register")
+            return redirect("account_login")
         else:
             # user found, Error
             return redirect("account_register")
