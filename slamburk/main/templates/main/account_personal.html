@@ -1,0 +1,54 @@
+{% extends './_base.html' %} 
+{% load i18n %}
+
+{% block title %}
+{% trans "Account" %}
+ - 
+{% trans "Personal information" %}
+{% endblock title %} 
+
+{% block body %}
+
+<div class="container-sm user-account">
+<h1>{% trans "Personal Information" %}</h1>
+   <!-- <div class=""></div> --> 
+    <div class="row border">
+        <div class="col-3 border-dark border-end">
+        <nav class="nav flex-column">
+            <a class="nav-link active" aria-current="page" href="/ucet">{% trans "Personal information" %}</a>
+            <a class="nav-link" href="/ucet/adresy">{% trans "Shipping addresses" %}</a>
+        </nav>
+        </div>
+        <div class="col-9">
+            <form action="api/customer/personal/edit" method="post" class="row g-3">
+
+
+                <div class="col-md-6">
+                  <label for="nameInput" class="form-label">{{ form.name.label }}</label>                      
+                                {{ form.name }}
+                </div>
+                <div class="col-md-6">
+                  <label for="surnameInput" class="form-label">{{ form.surname.label }}</label>                      
+                                {{ form.surname }}
+                </div>
+                <div class="col-md-12">
+                  <label for="emailInput" class="form-label">{{ form.email.label }}</label>                      
+                                {{ form.email }}
+                </div>
+                <div class="col-md-6">
+                  <label for="dobInput" class="form-label">{{ form.date_of_birth.label }}</label>                      
+                                {{ form.date_of_birth }}
+                </div>
+                <div class="col-md-6">
+                  <label for="genderInput" class="form-label">{{ form.gender.label }}</label>                      
+                                {{ form.gender }}
+                </div>
+                {% csrf_token %}
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock body %}

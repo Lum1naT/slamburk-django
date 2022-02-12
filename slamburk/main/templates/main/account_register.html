@@ -1,0 +1,53 @@
+{% extends './_base.html' %} 
+{% load i18n %}
+
+{% block title %}
+{% trans "Register" %}
+
+{% endblock title %} 
+
+{% block body %}
+<div class="container-sm user-account">
+
+
+   <!-- <div class=""></div> --> 
+    <div class="row d-flex justify-content-center">
+
+        <div class="col-md-6 border m-4">
+            <form action="api/customer/register" method="post" class="row g-2 my-4 px-2">
+
+                <h3 class="text-center">{% trans "Register" %}</h3>
+                <div class="col-xl-6">
+                  <label for="nameInput" class="form-label">{{ form.name.label }}</label>                      
+                                {{ form.name }}
+                </div>
+                <div class="col-xl-6">
+                  <label for="surnameInput" class="form-label">{{ form.surname.label }}</label>                      
+                                {{ form.surname }}
+                </div>
+                <div class="col-xl-12">
+                  <label for="emailInput" class="form-label">{{ form.email.label }}</label>                      
+                                {{ form.email }}
+                </div>
+                <div class="col-xl-6">
+                  <label for="passwordInput" class="form-label">{{ form.password.label }}</label>                      
+                                {{ form.password }}
+                </div>
+                <div class="col-xl-6">
+                  <label for="passwordCheckInput" class="form-label">{{ form.password_check.label }}</label>                      
+                                {{ form.password_check }}
+                </div>
+
+                {% csrf_token %}
+                <input type="submit" class="my-3" value={% trans "Sign up" %}>
+            </form>
+         <a href="/login">  
+            <p class="text-center">{% trans "Already a member? Log in here!" %}</p> 
+         </a>
+
+        </div>
+    </div>
+    
+</div>
+
+{% endblock body %}

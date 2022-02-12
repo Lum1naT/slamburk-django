@@ -24,7 +24,6 @@ urlpatterns = [
 
 
     ## ##
-    path('test/', views.test, name="test"),
 
     ## / Section ##
     path('', views.index, name="index"),

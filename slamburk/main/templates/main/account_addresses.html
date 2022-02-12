@@ -1,0 +1,58 @@
+{% extends './_base.html' %} 
+{% load i18n %}
+
+{% block title %}
+{% trans "Account" %}
+ - 
+{% trans "Shipping Addresses" %}
+{% endblock title %} 
+
+{% block body %}
+<div class="container-sm user-account">
+<h1>{% trans "Shipping Addresses" %}</h1>
+
+   <!-- <div class=""></div> --> 
+    <div class="row border">
+        <div class="col-md-3 border-dark border">
+        <nav class="nav sm-flex-column">
+            <a class="nav-link" aria-current="page" href="/ucet">{% trans "Personal Information" %}</a>
+            <a class="nav-link active" href="/ucet/adresy">{% trans "Shipping addresses" %}</a>
+        </nav>
+        </div>
+        <div class="col-9">
+            <form action="api/customer/personal/edit" method="post" class="row g-3">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                    +
+                    </div>
+                    <div class="col-md-9">
+                    <table>Table of hell</table>
+                    </div>
+                </div>
+                <h3>{% trans "Current shipping address" %}</h3>
+                <div class="col-md-6">
+                  <label for="nameInput" class="form-label">{{ form.name.label }}</label>                      
+                                {{ form.name }}
+                </div>
+                <div class="col-md-6">
+                  <label for="surnameInput" class="form-label">{{ form.surname.label }}</label>                      
+                                {{ form.surname }}
+                </div>
+                <div class="col-md-12">
+                  <label for="emailInput" class="form-label">{{ form.email.label }}</label>                      
+                                {{ form.email }}
+                </div>
+                <div class="col-md-6">
+                  <label for="dobInput" class="form-label">{{ form.date_of_birth.label }}</label>                      
+                                {{ form.date_of_birth }}
+                </div>
+
+                {% csrf_token %}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock body %}
