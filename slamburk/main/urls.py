@@ -29,6 +29,7 @@ urlpatterns = [
     path('', views.index, name="index"),
     path('login', views.account_login, name="account_login"),
     path('registrace', views.account_register, name="account_register"),
+    path('newknight', views.create_knight, name="create_knight"),
     path('process_account_login', views.process_account_login,
          name="process_account_login"),
     path('process_account_register', views.process_account_register,

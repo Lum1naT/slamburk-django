@@ -2,7 +2,7 @@ from django import forms
 from django.forms.widgets import PasswordInput
 from django.utils.translation import gettext as _
 
-from .models import GENDER_CHOICES
+from .models import CREW_CHOICES
 
 
 class RegisterForm(forms.Form):
@@ -21,3 +21,10 @@ class LoginForm(forms.Form):
         attrs={'class': 'form-control', "id": "emailInput"}))
     password = forms.CharField(label=_('Your Password'), widget=forms.PasswordInput(
         attrs={'class': 'form-control', "id": "passwordInput"}))
+
+
+class CreateKnightForm(forms.Form):
+    name = forms.CharField(label=_('Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "nameInput"}))
+    crew = forms.ChoiceField(label=_('Crew'), choices=CREW_CHOICES, widget=forms.Select(
+        attrs={'class': 'form-control', "id": "crewInput"}))

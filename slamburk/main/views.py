@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from django.contrib.auth.hashers import make_password
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, CreateKnightForm
 from .models import User
 ## Helpers, Methods ##
 
@@ -29,6 +29,20 @@ def _create_new_user(email, password, name=None):
 ## Views ##
 def index(request):
     return render(request, 'main/index.html')
+
+
+def create_knight(request):
+    if request.method == "GET":
+        form = CreateKnightForm()
+        return render(request, 'main/create_knight.html', {"form": form})
+
+
+def process_create_knight(request):
+    if request.method == "POST":
+        name = request.POST.get('name', '')
+        crew = request.POST.get('crew', '')
+        # TODO: LINK USER!
+        return render(request, 'main/create_knight.html', {"form": "form"})
 
 
 def account_register(request):
