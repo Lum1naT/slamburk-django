@@ -58,7 +58,7 @@ class Crew(models.Model):
     capacity = models.IntegerField(_("Capacity"), default=30)
     active = models.BooleanField(_("Active"), default=True)
     upload = models.ImageField(_("Crest"),
-                               upload_to='main/static/uploads/crests/', blank=True, null=True, default=None)
+                               upload_to='uploads/', blank=True, null=True, default=None)
     created_at = models.DateTimeField(editable=False)
     modified_at = models.DateTimeField()
 

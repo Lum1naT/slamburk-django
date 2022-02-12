@@ -27,29 +27,14 @@
                     </div>
                     <div class="col-md-9">
                     <table>Table of hell</table>
+                       {% for knight in knights %}
+                       <tr>       {{ knight.name }}</tr>  
+                        {% endfor %}
                     </div>
                 </div>
-                <h3>{% trans "Current shipping address" %}</h3>
-                <div class="col-md-6">
-                  <label for="nameInput" class="form-label">{{ form.name.label }}</label>                      
-                                {{ form.name }}
-                </div>
-                <div class="col-md-6">
-                  <label for="surnameInput" class="form-label">{{ form.surname.label }}</label>                      
-                                {{ form.surname }}
-                </div>
-                <div class="col-md-12">
-                  <label for="emailInput" class="form-label">{{ form.email.label }}</label>                      
-                                {{ form.email }}
-                </div>
-                <div class="col-md-6">
-                  <label for="dobInput" class="form-label">{{ form.date_of_birth.label }}</label>                      
-                                {{ form.date_of_birth }}
-                </div>
+                <h3>{% trans "All Knights Overview" %}</h3>
+                <a href="/novy-rytir"><i class="bi-plus icon mx-2" role="img" aria-label="Plus"></i> </a>
 
-                {% csrf_token %}
-                <input type="submit" value="Submit">
-            </form>
         </div>
     </div>
     

@@ -1,5 +1,6 @@
 {% extends './_base.html' %} 
 {% load i18n %}
+{% load static %}
 
 {% block title %}
 {% trans "Log in" %}
@@ -18,12 +19,24 @@
                 <h3 class="text-center">{% trans "Register Knight" %}</h3>
 
                 <div class="col-xl-12 my-2">
-                  <label for="emailInput" class="form-label">{{ form.name.label }}</label>                      
+                  <label for="namelInput" class="form-label">{{ form.name.label }}</label>                      
                                 {{ form.name }}
                 </div>
                 <div class="col-xl-12 my-2">
-                  <label for="passwordInput" class="form-label">{{ form.crew.label }}</label>                      
-                                {{ form.crew }}
+
+
+                  <label for="crewInput" class="form-label"></label>   
+
+                         {% for crew in form.crew %}
+                         {% for qs in form.crew.field.queryset %}
+                         {{ qs.name }}
+                         {{ qs.capacity }}
+                     {% endfor %}
+
+                        <img src='{{ crew.field.queryset.url }}' class="img-responsive" style="width: 30%;" />
+                         </span>
+                  {% endfor %}
+
                 </div>
 
                 {% csrf_token %}

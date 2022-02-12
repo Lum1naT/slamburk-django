@@ -147,6 +147,9 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'uploads')
+UPLOAD_URL = '/uploads/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.hashers import make_password, check_password
 
 from .forms import RegisterForm, LoginForm, CreateKnightForm
-from .models import User
+from .models import User, Knight, Crew
 ## Helpers, Methods ##
 
 
@@ -13,6 +13,24 @@ def _get_user_by_email(email):
         if result:
             return result
     except User.DoesNotExist:
+        return False
+
+
+def _get_user_by_id(id):
+    try:
+        result = User.objects.get(id=id)
+        if result:
+            return result
+    except User.DoesNotExist:
+        return False
+
+
+def _get_all_knights_for_user(user):
+    try:
+        result = Knight.objects.filter(user=user)
+        if result:
+            return result
+    except Knight.DoesNotExist:
         return False
 
 
@@ -51,7 +69,10 @@ def all_knights_overview(request):
     if request.method == "GET":
         if request.session["user_id"] is not None:
             print("ok: " + str(request.session["user_id"]))
-            return render(request, "main/user_knights_overview.html")
+            user = _get_user_by_id(request.session["user_id"])
+            all_knights = _get_all_knights_for_user(user)
+            print(str(all_knights))
+            return render(request, "main/user_knights_overview.html", {"knights": all_knights})
         else:
             return redirect("account_login")
 
