@@ -26,16 +26,16 @@
 
 
                   <label for="crewInput" class="form-label"></label>   
-
-                         {% for crew in form.crew %}
-                         {% for qs in form.crew.field.queryset %}
-                         {{ qs.name }}
-                         {{ qs.capacity }}
-                     {% endfor %}
-
+                            {% for qs in form.crew.field.queryset %}
+                            <input type="radio" name="crew"/>
+                                {{ qs.name }}
+                                {{ qs.capacity }}
+                        <span>
                         <img src='{{ crew.field.queryset.url }}' class="img-responsive" style="width: 30%;" />
-                         </span>
-                  {% endfor %}
+                            </span>
+
+                            {% endfor %}
+
 
                 </div>
 
