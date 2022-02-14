@@ -73,7 +73,8 @@ class Crew(models.Model):
 
 
 class Knight(models.Model):
-    name = models.CharField(_("Name"), max_length=100)
+    first_name = models.CharField(_("First Name"), max_length=100)
+    last_name = models.CharField(_("Last Name"), max_length=100)
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True)
     crew = models.ForeignKey(
@@ -91,4 +92,4 @@ class Knight(models.Model):
         return super(Knight, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.first_name + " " + self.last_name

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from django.contrib.auth.hashers import make_password, check_password
 
-from .forms import RegisterForm, LoginForm, CreateKnightForm
+from .forms import RegisterForm, LoginForm, CreateKnightForm, EditKnightForm
 from .models import User, Knight, Crew
 ## Helpers, Methods ##
 
@@ -25,6 +25,56 @@ def _get_user_by_id(id):
         return False
 
 
+def _get_knight_by_id(id):
+    try:
+        result = Knight.objects.get(id=id)
+        if result:
+            return result
+    except Knight.DoesNotExist:
+        return False
+
+
+def _get_crew_by_name(name):
+    try:
+        result = Crew.objects.get(name=name)
+        if result:
+            return result
+    except Crew.DoesNotExist:
+        return False
+
+
+def _get_all_active_crews():
+    try:
+        query = Crew.objects.filter(active=True)
+        for q in query:
+            print(str((q)))
+        return query
+    except Crew.DoesNotExist:
+        return False
+
+
+def _get_crew_capacity():
+    all_crews = _get_all_active_crews()
+    result = []
+    for crew in all_crews:
+        count = _count_knights_in_crew(crew)
+        result.append((str(crew), str(count), str(
+            crew.capacity), str(crew.upload)))
+    print(str(result))
+    return result
+
+
+def _count_knights_in_crew(crew):
+    try:
+        result = Knight.objects.filter(crew=crew).count()
+        if result is None:
+            return 0
+        else:
+            return result
+    except Knight.DoesNotExist:
+        return False
+
+
 def _get_all_knights_for_user(user):
     try:
         result = Knight.objects.filter(user=user)
@@ -32,6 +82,16 @@ def _get_all_knights_for_user(user):
             return result
     except Knight.DoesNotExist:
         return False
+
+
+def _knight_dict_from_knight(knight):
+    result = {
+        "first_name": knight.first_name,
+        "last_name": knight.last_name,
+        "crew": str(knight.crew),
+    }
+    print(result)
+    return result
 
 
 def _create_new_user(email, password, name=None):
@@ -44,7 +104,19 @@ def _create_new_user(email, password, name=None):
     return new_user
 
 
+def _create_new_knight(first_name, last_name, crew, user):
+    new_knight = Knight()
+    new_knight.first_name = first_name
+    new_knight.last_name = last_name
+    new_knight.crew = crew
+    new_knight.user = user
+    new_knight.save()
+    return new_knight
+
+
 ## Views ##
+
+
 def index(request):
     return render(request, 'main/index.html')
 
@@ -80,15 +152,56 @@ def all_knights_overview(request):
 def create_knight(request):
     if request.method == "GET":
         form = CreateKnightForm()
-        return render(request, 'main/create_knight.html', {"form": form})
+        crew_capacities = _get_crew_capacity()
+        return render(request, 'main/create_knight.html', {"form": form, "crewcap": crew_capacities})
+
+
+def edit_knight(request, id):
+    if request.method == "GET":
+        if request.session["user_id"] is not None:
+            user = _get_user_by_id(request.session["user_id"])
+            knight = _get_knight_by_id(id)
+
+            if isinstance(knight, bool):
+                print("Knight with id: " + str(id) + " not found")
+                pass
+                return redirect("all_knights_overview")
+            else:
+                if knight.user.id != user.id:
+                    return redirect("all_knights_overview")
+                form_data = _knight_dict_from_knight(knight)
+            form = EditKnightForm(initial=form_data)
+            crew_capacities = _get_crew_capacity()
+            return render(request, 'main/edit_knight.html', {"form": form, "crewcap": crew_capacities})
 
 
 def process_create_knight(request):
     if request.method == "POST":
-        name = request.POST.get('name', '')
-        crew = request.POST.get('crew', '')
-        # TODO: LINK USER!
-        return render(request, 'main/create_knight.html', {"form": "form"})
+        if request.session["user_id"] is not None:
+            user = _get_user_by_id(request.session["user_id"])
+            first_name = request.POST.get('first_name', '')
+            last_name = request.POST.get('last_name', '')
+            crew = request.POST.get('crew', '')
+            found_crew = _get_crew_by_name(crew)
+            if isinstance(found_crew, bool):
+                # Error, Crew not found
+                return redirect("create_knight")
+            else:
+                capacity = found_crew.capacity
+                taken = _count_knights_in_crew(found_crew)
+                if capacity > taken:
+                    # OK
+                    new_knight = _create_new_knight(
+                        first_name, last_name, found_crew, user)
+                    if new_knight:
+                        print(str(new_knight.id))
+                        return redirect("all_knights_overview")
+                elif capacity <= taken:
+                    # Crew Full
+                    return redirect("create_knight")
+                return redirect("create_knight")
+
+def
 
 
 def account_register(request):

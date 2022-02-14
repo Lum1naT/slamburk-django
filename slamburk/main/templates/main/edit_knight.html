@@ -14,7 +14,8 @@
     <div class="row d-flex justify-content-center">
 
         <div class="col-md-6 border m-4">
-            <form action="process_create_knight" method="post" class="row g-2 my-4 px-2">
+          {% with form as form.as_p %}
+            <form action="process_edit_knight" method="post" class="row g-2 my-4 px-2">
 
                 <h3 class="text-center">{% trans "Register Knight" %}</h3>
 
@@ -30,11 +31,12 @@
                     {{ form.last_name }}                
                   </div>
                 <div class="col-xl-12 my-4">
-
-
+                  {{ form.crew.value }}
                   <label for="crewInput" class="form-label">Družina</label><br>
                                 {% for crew in crewcap%}
-                                <input type="radio" name="crew" value="{{crew.0}}" required/>
+
+                                <input type="radio" name="crew" value="{{crew.0}}" required                                 {% if form.crew.value == crew.0 %}
+                                checked="checked"                                {% endif %}/>
                                 <img src="/{{ crew.3 }}" class="img-responsive" style="width: 10%;" />
 
                                 {{ crew.0 }} {{ crew.1 }} / {{ crew.2 }}
@@ -50,7 +52,7 @@
                 {% csrf_token %}
                 <input class="my-3" type="submit" value={% trans "Create Knight" %}>
             </form>
-
+            {% endwith %}
         </div>
     </div>
     

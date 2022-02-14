@@ -22,6 +22,3 @@ urlpatterns = [
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
 ]
-
-urlpatterns += static(settings.UPLOAD_URL,
-                      document_root=settings.UPLOAD_ROOT)

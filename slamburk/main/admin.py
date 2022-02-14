@@ -23,7 +23,7 @@ class CrewAdmin(admin.ModelAdmin):
 
 @admin.register(Knight)
 class KnightAdmin(admin.ModelAdmin):
-    list_display = ("name", "crew", "created_at")
+    list_display = ("first_name", "last_name", "crew", "created_at")
     readonly_fields = ("created_at", "modified_at")
     verbose_name = _("Knight")
     verbose_name_plural = _("Knights")

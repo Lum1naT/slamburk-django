@@ -2,7 +2,17 @@ from django import forms
 from django.forms.widgets import PasswordInput
 from django.utils.translation import gettext as _
 
-from .models import CREW_CHOICES, Crew
+from .models import CREW_CHOICES, Crew, Knight
+
+
+def _get_all_active_crews():
+    try:
+        query = Crew.objects.filter(active=True)
+        for q in query:
+            print(str((q)))
+        return query
+    except Crew.DoesNotExist:
+        return False
 
 
 class RegisterForm(forms.Form):
@@ -24,17 +34,18 @@ class LoginForm(forms.Form):
 
 
 class CreateKnightForm(forms.Form):
+    first_name = forms.CharField(label=_('First Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "firstnameInput", "placeholder": "Jméno"}))
+    last_name = forms.CharField(label=_('Last Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "lastnameInput", "placeholder": "Příjmení"}))
+    crew = forms.ModelMultipleChoiceField(label=_('Crew'), queryset=Knight.objects.none(), widget=forms.RadioSelect(
+        attrs={"id": "crewInput"}))
 
-    def _get_all_active_crews():
-        try:
-            query = Crew.objects.filter(active=True)
-            result = []
-            for crew in query:
-                result.append((crew.name[0:1], crew))
-            return query
-        except Crew.DoesNotExist:
-            return False
-    name = forms.CharField(label=_('Name'), widget=forms.TextInput(
-        attrs={'class': 'form-control', "id": "nameInput"}))
-    crew = forms.ModelMultipleChoiceField(label=_('Crew'), queryset=_get_all_active_crews(), widget=forms.RadioSelect(
+
+class EditKnightForm(forms.Form):
+    first_name = forms.CharField(label=_('First Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "firstnameInput", "placeholder": "Jméno"}))
+    last_name = forms.CharField(label=_('Last Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "lastnameInput", "placeholder": "Příjmení"}))
+    crew = forms.ModelChoiceField(label=_('Crew'), queryset=Knight.objects.none(), widget=forms.RadioSelect(
         attrs={"id": "crewInput"}))

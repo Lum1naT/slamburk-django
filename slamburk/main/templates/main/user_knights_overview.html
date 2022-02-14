@@ -26,10 +26,11 @@
                     +
                     </div>
                     <div class="col-md-9">
-                    <table>Table of hell</table>
+                        <div class="overflow-auto">
                        {% for knight in knights %}
-                       <tr>       {{ knight.name }}</tr>  
+                       <div class="col-md-9"> {{ knight.first_name }} {{ knight.last_name }} <a class="btn btn-primary" href="/upravit-rytire/{{ knight.id }}">Upravit rytíře</a></div>
                         {% endfor %}
+                       </div>
                     </div>
                 </div>
                 <h3>{% trans "All Knights Overview" %}</h3>

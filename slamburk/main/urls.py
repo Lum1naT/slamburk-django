@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -32,10 +34,16 @@ urlpatterns = [
     path('registrace', views.account_register, name="account_register"),
     path('ucet', views.account_overview, name="account_overview"),
     path('novy-rytir', views.create_knight, name="create_knight"),
+    path('upravit-rytire/<int:id>', views.edit_knight, name="edit_knight"),
     path('rytiri', views.all_knights_overview, name="all_knights_overview"),
     path('process_account_login', views.process_account_login,
          name="process_account_login"),
     path('process_account_register', views.process_account_register,
-         name="process_account_register")
+         name="process_account_register"),
+    path('process_create_knight', views.process_create_knight,
+         name="process_create_knight")
 
 ]
+
+urlpatterns += static(settings.UPLOAD_URL,
+                      document_root=settings.UPLOAD_ROOT)
