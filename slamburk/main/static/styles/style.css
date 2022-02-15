@@ -4,9 +4,17 @@
   src: url(./vinque.otf) format("opentype");
 }
 body {
-  background-color: white;
+  background-color: #F5DEB3;
   font-family: "vinque", sans-serif;
   letter-spacing: 0px;
+}
+
+.image-hrad-main {
+  z-index: 1;
+}
+
+nav {
+  background-color: #F5DEB3;
 }
 
 li:hover {

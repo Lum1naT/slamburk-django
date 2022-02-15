@@ -1,8 +1,8 @@
   {% load static %}
 
-<nav class="navbar navbar-light navbar-expand-md bg-light border-bottom  border-3 border-dark">
+<nav class="navbar navbar-light navbar-expand-md border-bottom  border-3 border-dark">
   <div class="container-fluid ms-5">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
       <img src="{% static '/images/logo.png' %}" alt="logo" width="61" height="70" class="d-inline-block align-text-bottom me-5">
       
     </a>
@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active mx-lg-2" aria-current="page" href="#">Domů</a>
+          <a class="nav-link active mx-lg-2" aria-current="page" href="/">Domů</a>
         </li>
         <li class="nav-item">
           <a class="nav-link mx-lg-2" href="#">Features</a>
@@ -38,7 +38,8 @@
             {% endif %}
             {% if request.session.user_id %}
             uživatel: {{ request.session.user_email }}
-            <a href="/logout"><i class="bi-door-open-fill icon mx-2" role="img" aria-label="Logout"></i> </a>
+            <a href="/rytiri"><i class="bi-person-circle icon mx-2" role="img" aria-label="Knights"></i></a>
+            <a href="/logout"><i class="bi-door-open-fill icon mx-2" role="img" aria-label="Logout"></i></a>
             {% endif %}
           </div>
     </div>

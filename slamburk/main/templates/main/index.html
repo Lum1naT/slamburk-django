@@ -1,11 +1,15 @@
 {% extends './_base.html' %}
 
+{% load static %}
 {% block title %}
 Domů
 {% endblock title %}
 
 {% block body %}
-<div class="container">
+<div class="container-fluid d-flex m-0">
+    <div class="overlay"></div>
+    <img src="{% static '/images/hrad-main-2000x1324.jpg' %}" class="img-fluid image-hrad-main" alt="Hrad úvodní">
+
 
 </div>
 

@@ -1,25 +1,34 @@
-                    @font-face {
-                        font-family: 'vinque';
-                        font-display: swap;
-                        src: url(./vinque.otf) format('opentype');
-                    }
-                    
-                    body {
-                        background-color: white;
-                        font-family: 'vinque', sans-serif;
-                        letter-spacing: 0px;
-                    }
-                    
-                    li {
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-                    
-                    .icon {
-                        color: gray;
-                        font-size: 30px;
-                        &:hover {
-                            color: black;
-                        }
-                    }
+$primary-color: #F5DEB3;
+@font-face {
+    font-family: 'vinque';
+    font-display: swap;
+    src: url(./vinque.otf) format('opentype');
+}
+
+body {
+    background-color: $primary-color;
+    font-family: 'vinque', sans-serif;
+    letter-spacing: 0px;
+}
+
+.image-hrad-main {
+    z-index: 1;
+}
+
+nav {
+    background-color: $primary-color;
+}
+
+li {
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.icon {
+    color: gray;
+    font-size: 30px;
+    &:hover {
+        color: black;
+    }
+}
