@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from django.contrib.auth.hashers import make_password, check_password
 
-from .forms import RegisterForm, LoginForm, CreateKnightForm, EditKnightForm
+from .forms import EditUserForm, RegisterForm, LoginForm, CreateKnightForm, EditKnightForm
 from .models import User, Knight, Crew
 ## Helpers, Methods ##
 
@@ -90,7 +90,16 @@ def _knight_dict_from_knight(knight):
         "last_name": knight.last_name,
         "crew": str(knight.crew),
     }
-    print(result)
+    return result
+
+
+def _user_dict_from_user(user):
+    result = {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": str(user.email),
+        "password": str(user.password),
+    }
     return result
 
 
@@ -114,6 +123,17 @@ def _create_new_knight(first_name, last_name, crew, user):
     return new_knight
 
 
+def _edit_knight(knight, first_name=None, last_name=None, crew=None, user=None):
+    if first_name:
+        knight.first_name = first_name
+    if last_name:
+        knight.last_name = last_name
+    if crew:
+        knight.crew = crew
+    knight.save()
+    return knight
+
+
 ## Views ##
 
 
@@ -123,28 +143,32 @@ def index(request):
 
 def account_logout(request):
     if request.method == "GET":
-        if request.session["user_id"] is not None:
+        if "user_id" in request.session:
             del request.session["user_id"]
             return redirect("account_login")
 
 
 def account_overview(request):
     if request.method == "GET":
-        if request.session["user_id"] is not None:
-            # TODO: ADD FORM!
-            return render(request, "main/account_personal.html")
+        if "user_id" in request.session:
+            user = _get_user_by_id(request.session["user_id"])
+            if user.email == request.session["user_email"]:
+                form = EditUserForm(initial=_user_dict_from_user(user))
+                return render(request, "main/account_personal.html", {"form": form})
         else:
             return redirect("account_login")
 
 
 def all_knights_overview(request):
     if request.method == "GET":
-        if request.session["user_id"] is not None:
+        if "user_id" in request.session:
             print("ok: " + str(request.session["user_id"]))
             user = _get_user_by_id(request.session["user_id"])
-            all_knights = _get_all_knights_for_user(user)
-            print(str(all_knights))
-            return render(request, "main/user_knights_overview.html", {"knights": all_knights})
+            if user.email == request.session["user_email"]:
+
+                all_knights = _get_all_knights_for_user(user)
+                print(str(all_knights))
+                return render(request, "main/user_knights_overview.html", {"knights": all_knights})
         else:
             return redirect("account_login")
 
@@ -158,60 +182,96 @@ def create_knight(request):
 
 def edit_knight(request, id):
     if request.method == "GET":
-        if request.session["user_id"] is not None:
+        if "user_id" in request.session:
+            request.session["knight_id"] = id
             user = _get_user_by_id(request.session["user_id"])
-            knight = _get_knight_by_id(id)
+            if user.email == request.session["user_email"]:
 
-            if isinstance(knight, bool):
-                print("Knight with id: " + str(id) + " not found")
-                pass
-                return redirect("all_knights_overview")
-            else:
-                if knight.user.id != user.id:
+                knight = _get_knight_by_id(id)
+
+                if isinstance(knight, bool):
+                    print("Knight with id: " + str(id) + " not found")
+                    pass
                     return redirect("all_knights_overview")
-                form_data = _knight_dict_from_knight(knight)
-            form = EditKnightForm(initial=form_data)
-            crew_capacities = _get_crew_capacity()
-            return render(request, 'main/edit_knight.html', {"form": form, "crewcap": crew_capacities})
+                else:
+                    if knight.user.id != user.id:
+                        return redirect("all_knights_overview")
+                    form_data = _knight_dict_from_knight(knight)
+                form = EditKnightForm(initial=form_data)
+                crew_capacities = _get_crew_capacity()
+                return render(request, 'main/edit_knight.html', {"form": form, "crewcap": crew_capacities})
 
 
 def process_create_knight(request):
     if request.method == "POST":
-        if request.session["user_id"] is not None:
+        if "user_id" in request.session:
             user = _get_user_by_id(request.session["user_id"])
-            first_name = request.POST.get('first_name', '')
-            last_name = request.POST.get('last_name', '')
-            crew = request.POST.get('crew', '')
-            found_crew = _get_crew_by_name(crew)
-            if isinstance(found_crew, bool):
-                # Error, Crew not found
-                return redirect("create_knight")
-            else:
-                capacity = found_crew.capacity
-                taken = _count_knights_in_crew(found_crew)
-                if capacity > taken:
-                    # OK
-                    new_knight = _create_new_knight(
-                        first_name, last_name, found_crew, user)
-                    if new_knight:
-                        print(str(new_knight.id))
-                        return redirect("all_knights_overview")
-                elif capacity <= taken:
-                    # Crew Full
-                    return redirect("create_knight")
-                return redirect("create_knight")
+            if user.email == request.session["user_email"]:
 
-def
+                first_name = request.POST.get('first_name', '')
+                last_name = request.POST.get('last_name', '')
+                crew = request.POST.get('crew', '')
+                found_crew = _get_crew_by_name(crew)
+                if isinstance(found_crew, bool):
+                    # Error, Crew not found
+                    return redirect("create_knight")
+                else:
+                    capacity = found_crew.capacity
+                    taken = _count_knights_in_crew(found_crew)
+                    if capacity > taken:
+                        # OK
+                        new_knight = _create_new_knight(
+                            first_name, last_name, found_crew, user)
+                        if new_knight:
+                            print(str(new_knight.id))
+                            return redirect("all_knights_overview")
+                    elif capacity <= taken:
+                        # Crew Full
+                        return redirect("create_knight")
+                    return redirect("create_knight")
+
+
+def process_edit_knight(request):
+    if request.method == "POST":
+        if "user_id" in request.session:
+            knight_id = request.session["knight_id"]
+            del request.session["knight_id"]
+            user = _get_user_by_id(request.session["user_id"])
+            if user.email == request.session["user_email"]:
+                knight = _get_knight_by_id(knight_id)
+                first_name = request.POST.get('first_name', '')
+                last_name = request.POST.get('last_name', '')
+                post_crew = request.POST.get('crew', '')
+                if isinstance(knight, bool):
+                    print("Knight with id: " + str(id) + " not found")
+                    pass
+                    return redirect("all_knights_overview")
+                else:
+                    if knight.user.id != user.id:
+                        return redirect("all_knights_overview")
+
+                    crew_capacities = _get_crew_capacity()
+                    for crew in crew_capacities:
+                        if crew[0] == knight.crew.name:
+                            if int(crew[1]) < int(crew[2]):
+                                print("OK")
+                                edit_result = _edit_knight(
+                                    knight=knight, first_name=first_name, last_name=last_name, crew=_get_crew_by_name(post_crew))
+                    return redirect("all_knights_overview")
 
 
 def account_register(request):
     if request.method == "GET":
+        if "user_id" in request.session:
+            return redirect("all_knights_overview")
         form = RegisterForm()
         return render(request, 'main/account_register.html', {"form": form})
 
 
 def account_login(request):
     if request.method == "GET":
+        if "user_id" in request.session:
+            return redirect("all_knights_overview")
         form = LoginForm()
         return render(request, 'main/account_login.html', {"form": form})
 

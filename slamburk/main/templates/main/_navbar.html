@@ -32,13 +32,14 @@
         </li>
       </ul>
           <div id="socials-top" class="me-5 ms-auto">
-            <a href="/registrace"><i class="bi-person icon mx-3" role="img" aria-label="User"></i></a>
-
-            <a href="/login"><i class="bi-cart icon mx-2" role="img" aria-label="Cart"></i> </a>
-            {% if request.session.user_id %}
-            <a href="/logout"><i class="bi-cart icon mx-2" role="img" aria-label="Cart"></i> </a>
+           
+            {% if request.session.user_id == None %}
+            <a href="/login"><i class="bi-door-open-fill icon mx-2" role="img" aria-label="Logout"></i> </a>
             {% endif %}
-
+            {% if request.session.user_id %}
+            uživatel: {{ request.session.user_email }}
+            <a href="/logout"><i class="bi-door-open-fill icon mx-2" role="img" aria-label="Logout"></i> </a>
+            {% endif %}
           </div>
     </div>
 

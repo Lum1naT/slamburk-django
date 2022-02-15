@@ -33,7 +33,9 @@ CREW_CHOICES = (
 
 class User(models.Model):
     email = models.EmailField(_("Email"), unique=True)
-    name = models.CharField(_("Name"), max_length=100,
+    first_name = models.CharField(_("First Name"), max_length=100,
+                            null=True, blank=True, default=None)
+    last_name = models.CharField(_("Last Name"), max_length=100,
                             null=True, blank=True, default=None)
     password = models.CharField(_("Password"),
                                 max_length=1024, null=True, blank=True, default=None)
@@ -73,8 +75,9 @@ class Crew(models.Model):
 
 
 class Knight(models.Model):
-    first_name = models.CharField(_("First Name"), max_length=100)
-    last_name = models.CharField(_("Last Name"), max_length=100)
+    first_name = models.CharField(
+        _("First Name"), max_length=100, unique=False)
+    last_name = models.CharField(_("Last Name"), max_length=100, unique=False)
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True)
     crew = models.ForeignKey(

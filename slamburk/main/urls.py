@@ -41,7 +41,9 @@ urlpatterns = [
     path('process_account_register', views.process_account_register,
          name="process_account_register"),
     path('process_create_knight', views.process_create_knight,
-         name="process_create_knight")
+         name="process_create_knight"),
+    path('process_edit_knight', views.process_edit_knight,
+         name="process_edit_knight")
 
 ]
 

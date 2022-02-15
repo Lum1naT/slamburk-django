@@ -33,6 +33,17 @@ class LoginForm(forms.Form):
         attrs={'class': 'form-control', "id": "passwordInput"}))
 
 
+class EditUserForm(forms.Form):
+    first_name = forms.CharField(label=_('First Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "firstnameInput", "placeholder": "Jméno"}))
+    last_name = forms.CharField(label=_('Last Name'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "lastnameInput", "placeholder": "Příjmení"}))
+    email = forms.EmailField(label=_('Your Email'), widget=forms.TextInput(
+        attrs={'class': 'form-control', "id": "emailInput"}))
+    password = forms.CharField(label=_('Your Password'), widget=forms.PasswordInput(
+        attrs={'class': 'form-control', "id": "passwordInput"}))
+
+
 class CreateKnightForm(forms.Form):
     first_name = forms.CharField(label=_('First Name'), widget=forms.TextInput(
         attrs={'class': 'form-control', "id": "firstnameInput", "placeholder": "Jméno"}))

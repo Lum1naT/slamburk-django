@@ -9,7 +9,7 @@
 
 {% block body %}
 <div class="container-sm user-account">
-<h1>{% trans "Shipping Addresses" %}</h1>
+<h1>{% trans "Knights Overview" %}</h1>
 
    <!-- <div class=""></div> --> 
     <div class="row border">
@@ -22,9 +22,9 @@
         <div class="col-9">
             <form action="api/customer/personal/edit" method="post" class="row g-3">
                 <div class="col-md-12">
-                    <div class="col-md-3">
-                    +
-                    </div>
+                    <h3>{% trans "Your Knights" %} <a href="/novy-rytir"><i class="bi-plus-circle-fill icon mx-2" role="img" aria-label="Plus"></i></a>
+                    </h3>
+
                     <div class="col-md-9">
                         <div class="overflow-auto">
                        {% for knight in knights %}
@@ -33,8 +33,6 @@
                        </div>
                     </div>
                 </div>
-                <h3>{% trans "All Knights Overview" %}</h3>
-                <a href="/novy-rytir"><i class="bi-plus icon mx-2" role="img" aria-label="Plus"></i> </a>
 
         </div>
     </div>

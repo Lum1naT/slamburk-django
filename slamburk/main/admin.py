@@ -7,7 +7,7 @@ from .models import User, Crew, Knight
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "name")
+    list_display = ("email", "first_name", "last_name")
     readonly_fields = ("created_at", "modified_at")
     verbose_name = _("User")
     verbose_name_plural = _("Users")

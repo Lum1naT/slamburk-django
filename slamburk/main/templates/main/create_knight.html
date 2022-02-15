@@ -23,7 +23,7 @@
                                 {{ form.name }}
                 </div>
                 <div class="input-group">
-                    <div class="input-group-prepend">
+                    <div class="input-group-prepend d-none d-sm-block">
                       <span class="input-group-text" id="">{% trans "First & last name" %}</span>
                     </div>
                     {{ form.first_name }}                
@@ -48,7 +48,7 @@
                 </div>
 
                 {% csrf_token %}
-                <input class="my-3" type="submit" value={% trans "Create Knight" %}>
+                <input class="my-3" type="submit" value="{% trans "Create Knight" %}">
             </form>
 
         </div>
